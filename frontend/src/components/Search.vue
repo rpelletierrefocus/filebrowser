@@ -29,14 +29,15 @@
           <p>{{ text }}</p>
 
           <template v-if="value.length === 0">
+            <h3>{{ $t('search.types') }}</h3>
             <div class="boxes">
-              <h3>{{ $t('search.types') }}</h3>
               <div>
                 <div
                   tabindex="0"
                   v-for="(v,k) in boxes"
                   :key="k"
                   role="button"
+                  class="box"
                   @click="init('type:'+k)"
                   :aria-label="$t('search.'+v.label)"
                 >
