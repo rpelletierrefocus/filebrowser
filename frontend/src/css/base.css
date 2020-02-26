@@ -1,3 +1,7 @@
+html {
+  line-height: unset;
+}
+
 body {
   font-family: 'Roboto', sans-serif;
   padding-top: 4em;
