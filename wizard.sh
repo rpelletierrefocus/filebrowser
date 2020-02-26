@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/bin/bash
 
 set -e
 
@@ -43,7 +43,26 @@ buildBinary () {
   rice embed-go
 
   cd $REPO
-  go build -a -o filebrowser -ldflags "-s -w -X github.com/filebrowser/filebrowser/v2/version.CommitSHA=$COMMIT_SHA"
+  rm -rf out
+
+  platforms=("windows/amd64" "windows/386" "darwin/amd64" "linux/amd64" "linux/arm64" "linux/arm")
+
+  for platform in "${platforms[@]}"
+  do
+      platform_split=(${platform//\// })
+      GOOS=${platform_split[0]}
+      GOARCH=${platform_split[1]}
+      output_name='filebrowser-'$GOOS'-'$GOARCH
+      if [ $GOOS = "windows" ]; then
+          output_name+='.exe'
+      fi
+
+      env GOOS=$GOOS GOARCH=$GOARCH go build -a -o out/$output_name -ldflags "-s -w -X github.com/ConnorChristie/filebrowser/v2/version.CommitSHA=$COMMIT_SHA"
+      if [ $? -ne 0 ]; then
+          echo 'An error has occurred! Aborting the script execution...'
+          exit 1
+      fi
+  done
 }
 
 release () {
@@ -68,16 +87,8 @@ release () {
     exit 1
   fi
 
-  echo "🧼  Tidying up go modules"
-  go mod tidy
-
-  echo "🐑 Creating a new commit for the new release"
-  git commit --allow-empty -am "chore: version $semver"
-  git tag "$1"
-  git push
-  git push --tags origin
-
-  echo "📦 Done! $semver released."
+  go get github.com/tcnksm/ghr
+  ghr -t $GITHUB_TOKEN -u $CIRCLE_PROJECT_USERNAME -r $CIRCLE_PROJECT_REPONAME -c $CIRCLE_SHA1 -delete $semver ./out/
 }
 
 usage() {

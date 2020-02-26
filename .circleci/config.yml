@@ -29,12 +29,12 @@ jobs:
           at: '~/project'
       - run:
           name: "Compile"
-          command: GOOS=linux GOARCH=amd64 ./wizard.sh -c
+          command: ./wizard.sh -c
       - run:
           name: "Cleanup"
           command: |
             rm -rf frontend/build
-            git checkout -- go.sum # TODO: why is it being changed?
+            git checkout -- go.sum
       - persist_to_workspace:
           root: .
           paths:
@@ -45,10 +45,9 @@ jobs:
     steps:
       - attach_workspace:
           at: '~/project'
-      - setup_remote_docker
-      - run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
-      - run: curl -sL https://git.io/goreleaser | bash
-      - run: docker logout
+      - run:
+          name: "Release"
+          command: ./wizard.sh -r $CIRCLE_TAG
 workflows:
   version: 2
   build-workflow:
@@ -66,10 +65,9 @@ workflows:
             tags:
               only: /.*/
           requires:
-            - build-node
             - lint
+            - build-node
       - release:
-          context: deploy
           requires:
             - build-go
           filters:
