@@ -7,12 +7,12 @@
       </router-link>
 
       <div v-if="user.perm.create">
-        <button @click="$store.commit('showHover', 'newDir')" class="action" :aria-label="$t('sidebar.newFolder')" :title="$t('sidebar.newFolder')">
+        <button @click="$store.commit('showHover', 'newDir')" class="action" v-bind:class="{ disabled: !isFilesRoute() }" :disabled="!isFilesRoute()" :aria-label="$t('sidebar.newFolder')" :title="$t('sidebar.newFolder')">
           <i class="material-icons">create_new_folder</i>
           <span>{{ $t('sidebar.newFolder') }}</span>
         </button>
 
-        <button @click="$store.commit('showHover', 'newFile')" class="action" :aria-label="$t('sidebar.newFile')" :title="$t('sidebar.newFile')">
+        <button @click="$store.commit('showHover', 'newFile')" class="action" v-bind:class="{ disabled: !isFilesRoute() }" :disabled="!isFilesRoute()" :aria-label="$t('sidebar.newFile')" :title="$t('sidebar.newFile')">
           <i class="material-icons">note_add</i>
           <span>{{ $t('sidebar.newFile') }}</span>
         </button>
@@ -76,7 +76,10 @@ export default {
     help () {
       this.$store.commit('showHover', 'help')
     },
-    logout: auth.logout
+    logout: auth.logout,
+    isFilesRoute() {
+      return (this.$route.name.match('Files') || []).length > 0
+    }
   }
 }
 </script>
