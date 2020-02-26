@@ -26,8 +26,6 @@
     <div id="result" ref="result">
       <div>
         <template v-if="isEmpty">
-          <p>{{ text }}</p>
-
           <template v-if="value.length === 0">
             <h3>{{ $t('search.types') }}</h3>
             <div class="boxes">
@@ -53,10 +51,11 @@
             <router-link @click.native="close" :to="'./' + s.path">
               <i v-if="s.dir" class="material-icons">folder</i>
               <i v-else class="material-icons">insert_drive_file</i>
-              <span>./{{ s.path }}</span>
+              <span>{{ s.path }}</span>
             </router-link>
           </li>
         </ul>
+        <p v-show="noResults">{{ $t('search.noResultsFound') }}</p>
       </div>
       <p id="renew">
         <i class="material-icons spin">autorenew</i>
@@ -69,6 +68,7 @@
 import { mapState, mapGetters, mapMutations } from "vuex"
 import url from "@/utils/url"
 import { search } from "@/api"
+import debounce from 'lodash.debounce'
 
 var boxes = {
   image: { label: "images", icon: "insert_photo" },
@@ -87,7 +87,8 @@ export default {
       results: [],
       reload: false,
       resultsCount: 50,
-      scrollable: null
+      scrollable: null,
+      noResults: false
     }
   },
   watch: {
@@ -111,7 +112,7 @@ export default {
       }
     },
     value () {
-      if (this.results.length) {
+      if (this.value === '') {
         this.reset()
       }
     }
@@ -124,13 +125,6 @@ export default {
     },
     isEmpty() {
       return this.results.length === 0
-    },
-    text() {
-      if (this.ongoing) {
-        return ""
-      }
-
-      return this.value === '' ? this.$t("search.typeToSearch") : this.$t("search.pressToSearch")
     },
     filteredResults () {
       return this.results.slice(0, this.resultsCount)
@@ -165,21 +159,28 @@ export default {
         return
       }
 
-      this.results.length = 0
+      this.keyupDebounced()
     },
+    keyupDebounced: debounce(async function() {
+      await this.submit();
+    }, 2000),
     init (string) {
       this.value = `${string} `
       this.$refs.input.focus()
     },
     reset () {
       this.ongoing = false
+      this.noResults = false
       this.resultsCount = 50
       this.results = []
     },
     async submit(event) {
-      event.preventDefault()
+      if (event) {
+        event.preventDefault()
+      }
 
       if (this.value === '') {
+        this.reset()
         return
       }
 
@@ -189,10 +190,10 @@ export default {
       }
 
       this.ongoing = true
-
-
       this.results = await search(path, this.value)
       this.ongoing = false
+
+      this.noResults = this.results.length === 0 && this.value.length !== 0
     }
   }
 }

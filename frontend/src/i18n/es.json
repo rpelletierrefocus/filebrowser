@@ -203,8 +203,7 @@
     "types": "Tipos",
     "video": "Vídeo",
     "search": "Buscar...",
-    "typeToSearch": "Escribe para realizar una busqueda...",
-    "pressToSearch": "Presiona enter para buscar..."
+    "noResultsFound": "No results found..."
   },
   "languages": {
     "ar": "العربية",

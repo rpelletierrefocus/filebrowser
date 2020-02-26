@@ -146,6 +146,7 @@ header .search-button {
 
 #search.active #result {
   padding: .5em;
+  padding-top: 2em;
   height: calc(100% - 4em);
 }
 

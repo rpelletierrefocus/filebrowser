@@ -203,8 +203,7 @@
     "types": "種類",
     "video": "ビデオ",
     "search": "検索...",
-    "typeToSearch": "Type to search...",
-    "pressToSearch": "Press enter to search..."
+    "noResultsFound": "No results found..."
   },
   "languages": {
     "ar": "العربية",

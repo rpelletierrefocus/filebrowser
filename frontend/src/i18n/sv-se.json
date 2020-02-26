@@ -203,8 +203,7 @@
     "types": "Typ",
     "video": "Video",
     "search": "Sök...",
-    "typeToSearch": "Skriv för att söka....",
-    "pressToSearch": "Tryck på enter för att söka..."
+    "noResultsFound": "No results found..."
   },
   "languages": {
     "ar": "العربية",

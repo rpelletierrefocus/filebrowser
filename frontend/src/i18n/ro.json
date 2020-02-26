@@ -203,8 +203,7 @@
     "types": "Tipuri",
     "video": "Video",
     "search": "Caută...",
-    "typeToSearch": "Scrie pentru a căuta...",
-    "pressToSearch": "Apasă enter pentru a căuta..."
+    "noResultsFound": "No results found..."
   },
   "languages": {
     "ar": "العربية",

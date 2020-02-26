@@ -203,8 +203,7 @@
     "types": "类型",
     "video": "视频",
     "search": "搜索...",
-    "typeToSearch": "输入搜索...",
-    "pressToSearch": "回车搜索..."
+    "noResultsFound": "No results found..."
   },
   "languages": {
     "ar": "العربية",

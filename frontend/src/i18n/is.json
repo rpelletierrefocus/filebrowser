@@ -203,8 +203,7 @@
     "types": "Skrárgerðir",
     "video": "Myndbönd",
     "search": "Leita...",
-    "typeToSearch": "Skrifaðu til að leita...",
-    "pressToSearch": "Ýttu á Enter til að leita..."
+    "noResultsFound": "No results found..."
   },
   "languages": {
     "ar": "العربية",
