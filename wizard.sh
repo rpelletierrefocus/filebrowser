@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/bin/bash
 
 set -e
 
@@ -43,7 +43,25 @@ buildBinary () {
   rice embed-go
 
   cd $REPO
-  go build -a -o filebrowser -ldflags "-s -w -X github.com/filebrowser/filebrowser/v2/version.CommitSHA=$COMMIT_SHA"
+
+  declare -a OSES=("darwin" "linux")
+  declare -a ARCHES=("amd64" "arm" "arm64")
+
+  for os in "${OSES[@]}"
+  do
+    for arch in "${ARCHES[@]}"
+    do
+      GOOS=$os
+      GOARCH=$arch
+
+      go build -a -o out/filebrowser-$GOOS-$GOARCH -ldflags "-s -w -X github.com/ConnorChristie/filebrowser/v2/version.CommitSHA=$COMMIT_SHA"
+    done
+  done
+
+  GOOS=windows
+  GOARCH=amd64
+
+  go build -a -o out/filebrowser-$GOOS-$GOARCH.exe -ldflags "-s -w -X github.com/ConnorChristie/filebrowser/v2/version.CommitSHA=$COMMIT_SHA"
 }
 
 release () {
@@ -76,6 +94,9 @@ release () {
   git tag "$1"
   git push
   git push --tags origin
+
+  go get github.com/tcnksm/ghr
+  ghr -t $GITHUB_TOKEN -u $CIRCLE_PROJECT_USERNAME -r $CIRCLE_PROJECT_REPONAME -c $CIRCLE_SHA1 -delete $VERSION ./out/
 
   echo "📦 Done! $semver released."
 }
