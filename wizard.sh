@@ -43,6 +43,7 @@ buildBinary () {
   rice embed-go
 
   cd $REPO
+  rm -rf out
 
   platforms=("windows/amd64" "windows/386" "darwin/amd64" "linux/amd64" "linux/arm64" "linux/arm")
 
