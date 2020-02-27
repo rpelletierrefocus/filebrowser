@@ -86,19 +86,8 @@ release () {
     exit 1
   fi
 
-  echo "🧼  Tidying up go modules"
-  go mod tidy
-
-  echo "🐑 Creating a new commit for the new release"
-  git commit --allow-empty -am "chore: version $semver"
-  git tag "$1"
-  git push
-  git push --tags origin
-
   go get github.com/tcnksm/ghr
   ghr -t $GITHUB_TOKEN -u $CIRCLE_PROJECT_USERNAME -r $CIRCLE_PROJECT_REPONAME -c $CIRCLE_SHA1 -delete $VERSION ./out/
-
-  echo "📦 Done! $semver released."
 }
 
 usage() {
