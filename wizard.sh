@@ -44,24 +44,24 @@ buildBinary () {
 
   cd $REPO
 
-  declare -a OSES=("darwin" "linux")
-  declare -a ARCHES=("amd64" "arm" "arm64")
+  platforms=("windows/amd64" "windows/386" "darwin/amd64" "linux/amd64" "linux/arm64" "linux/arm")
 
-  for os in "${OSES[@]}"
+  for platform in "${platforms[@]}"
   do
-    for arch in "${ARCHES[@]}"
-    do
-      GOOS=$os
-      GOARCH=$arch
+      platform_split=(${platform//\// })
+      GOOS=${platform_split[0]}
+      GOARCH=${platform_split[1]}
+      output_name='filebrowser-'$GOOS'-'$GOARCH
+      if [ $GOOS = "windows" ]; then
+          output_name+='.exe'
+      fi
 
-      go build -a -o out/filebrowser-$GOOS-$GOARCH -ldflags "-s -w -X github.com/ConnorChristie/filebrowser/v2/version.CommitSHA=$COMMIT_SHA"
-    done
+      env GOOS=$GOOS GOARCH=$GOARCH go build -a -o out/$output_name -ldflags "-s -w -X github.com/ConnorChristie/filebrowser/v2/version.CommitSHA=$COMMIT_SHA"
+      if [ $? -ne 0 ]; then
+          echo 'An error has occurred! Aborting the script execution...'
+          exit 1
+      fi
   done
-
-  GOOS=windows
-  GOARCH=amd64
-
-  go build -a -o out/filebrowser-$GOOS-$GOARCH.exe -ldflags "-s -w -X github.com/ConnorChristie/filebrowser/v2/version.CommitSHA=$COMMIT_SHA"
 }
 
 release () {
