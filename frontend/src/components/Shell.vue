@@ -1,5 +1,9 @@
 <template>
   <div @click="focus" class="shell" ref="scrollable" :class="{ ['shell--hidden']: !showShell}">
+    <div class="shell__close">
+      <a class="shell__close-button" href="#" @click="close()"><i class="material-icons">close</i></a>
+    </div>
+
     <div v-for="(c, index) in content" :key="index" class="shell__result" >
       <div class="shell__prompt"><i class="material-icons">chevron_right</i></div>
       <pre class="shell__text">{{ c.text }}</pre>
@@ -90,7 +94,7 @@ export default {
       let results = {
         text: `${cmd}\n\n`
       }
-      
+
       this.history.push(cmd)
       this.historyPos = this.history.length
       this.content.push(results)
@@ -109,6 +113,9 @@ export default {
           this.scroll()
         }
       )
+    },
+    close () {
+      this.$store.commit('toggleShell')
     }
   }
 }
