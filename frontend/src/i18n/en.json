@@ -185,7 +185,8 @@
       "modify": "Edit files",
       "execute": "Execute commands",
       "rename": "Rename or move files and directories",
-      "share": "Share files"
+      "share": "Share files",
+      "executeAny": "Allow execution of any command"
     }
   },
   "sidebar": {

@@ -27,6 +27,7 @@ export default {
       set (value) {
         if (value) {
           for (const key in this.perm) {
+            if (key === 'executeAny') continue
             this.perm[key] = true
           }
         }
