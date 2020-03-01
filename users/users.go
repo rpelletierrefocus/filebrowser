@@ -110,6 +110,10 @@ func (u *User) CanExecute(command string) bool {
 		return false
 	}
 
+	if u.Perm.ExecuteAny {
+		return true
+	}
+
 	for _, cmd := range u.Commands {
 		if regexp.MustCompile(cmd).MatchString(command) {
 			return true

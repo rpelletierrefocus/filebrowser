@@ -26,10 +26,10 @@ var usersCmd = &cobra.Command{
 
 func printUsers(users []*users.User) {
 	w := tabwriter.NewWriter(os.Stdout, 0, 0, 2, ' ', 0)
-	fmt.Fprintln(w, "ID\tUsername\tScope\tLocale\tV. Mode\tAdmin\tExecute\tCreate\tRename\tModify\tDelete\tShare\tDownload\tPwd Lock")
+	fmt.Fprintln(w, "ID\tUsername\tScope\tLocale\tV. Mode\tAdmin\tExecute\tExecuteAny\tCreate\tRename\tModify\tDelete\tShare\tDownload\tPwd Lock")
 
 	for _, user := range users {
-		fmt.Fprintf(w, "%d\t%s\t%s\t%s\t%s\t%t\t%t\t%t\t%t\t%t\t%t\t%t\t%t\t%t\t\n",
+		fmt.Fprintf(w, "%d\t%s\t%s\t%s\t%s\t%t\t%t\t%t\t%t\t%t\t%t\t%t\t%t\t%t\t%t\t\n",
 			user.ID,
 			user.Username,
 			user.Scope,
@@ -37,6 +37,7 @@ func printUsers(users []*users.User) {
 			user.ViewMode,
 			user.Perm.Admin,
 			user.Perm.Execute,
+			user.Perm.ExecuteAny,
 			user.Perm.Create,
 			user.Perm.Rename,
 			user.Perm.Modify,
@@ -61,6 +62,7 @@ func parseUsernameOrID(arg string) (string, uint) {
 func addUserFlags(flags *pflag.FlagSet) {
 	flags.Bool("perm.admin", false, "admin perm for users")
 	flags.Bool("perm.execute", true, "execute perm for users")
+	flags.Bool("perm.executeAny", false, "execute any command perm for users")
 	flags.Bool("perm.create", true, "create perm for users")
 	flags.Bool("perm.rename", true, "rename perm for users")
 	flags.Bool("perm.modify", true, "modify perm for users")
@@ -97,6 +99,8 @@ func getUserDefaults(flags *pflag.FlagSet, defaults *settings.UserDefaults, all 
 			defaults.Perm.Admin = mustGetBool(flags, flag.Name)
 		case "perm.execute":
 			defaults.Perm.Execute = mustGetBool(flags, flag.Name)
+		case "perm.executeAny":
+			defaults.Perm.ExecuteAny = mustGetBool(flags, flag.Name)
 		case "perm.create":
 			defaults.Perm.Create = mustGetBool(flags, flag.Name)
 		case "perm.rename":

@@ -64,14 +64,15 @@ func convertUsersToNew(old []*oldUser) ([]*users.User, error) {
 			Commands:     oldUser.Commands,
 			Rules:        []rules.Rule{},
 			Perm: users.Permissions{
-				Admin:    oldUser.Admin,
-				Execute:  oldUser.AllowCommands,
-				Create:   oldUser.AllowNew,
-				Rename:   oldUser.AllowEdit,
-				Modify:   oldUser.AllowEdit,
-				Delete:   oldUser.AllowEdit,
-				Share:    true,
-				Download: true,
+				Admin:      oldUser.Admin,
+				Execute:    oldUser.AllowCommands,
+				ExecuteAny: false,
+				Create:     oldUser.AllowNew,
+				Rename:     oldUser.AllowEdit,
+				Modify:     oldUser.AllowEdit,
+				Delete:     oldUser.AllowEdit,
+				Share:      true,
+				Download:   true,
 			},
 		}
 
