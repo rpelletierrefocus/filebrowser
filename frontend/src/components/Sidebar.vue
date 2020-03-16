@@ -12,6 +12,12 @@
           <span>{{ $t('sidebar.newFolder') }}</span>
         </button>
 
+      <button @click="upload" :aria-label="$t('buttons.upload')" :title="$t('buttons.upload')" class="action" id="upload-button">
+          <i class="material-icons">file_upload</i>
+          <span>{{ $t('buttons.upload') }}</span>
+        </button>
+  
+      
         <button @click="$store.commit('showHover', 'newFile')" class="action" v-bind:class="{ disabled: !isFilesRoute() }" :disabled="!isFilesRoute()" :aria-label="$t('sidebar.newFile')" :title="$t('sidebar.newFile')">
           <i class="material-icons">note_add</i>
           <span>{{ $t('sidebar.newFile') }}</span>
